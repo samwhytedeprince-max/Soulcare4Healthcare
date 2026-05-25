@@ -1364,7 +1364,7 @@ footer {
     <div class="testi-track">
       <div class="testi-card reveal">
         <span class="testi-mark">"</span>
-        <p class="testi-quote">The illumination I received from Soulcare's teachings completely transformed how I understand my own body and mind. I now approach every day with a clarity I never thought possible. Dr. Moses truly carries a rare gift of wisdom.</p>
+        <p class="testi-quote">The illumination I received from Soulcare's teachings completely transformed how I understand my own body and mind. I now approach every day with a clarity I never thought possible. Prof Dr Sam-Chuks truly carries a rare gift of wisdom.</p>
         <div class="testi-author">
           <div class="testi-ava">CO</div>
           <div>
@@ -1529,19 +1529,40 @@ footer {
      SCRIPTS
 ===================================================== -->
 <script>
-/* LOADER */
-window.addEventListener('load', () => {
+/* LOADER — with fallback */
+(function hideLoader() {
+  const loader = document.getElementById('loader');
+  if (!loader) return;
+  
+  // Safety: force hide after 5 seconds no matter what
   setTimeout(() => {
-    gsap.to('#loader', {
-      opacity: 0, duration: 0.8, ease: 'power2.in',
-      onComplete: () => { document.getElementById('loader').style.display = 'none'; }
+    loader.style.display = 'none';
+    document.body.style.overflow = ''; // Force scroll enable
+  }, 5000);
+  
+  // GSAP approach
+  if (typeof gsap !== 'undefined') {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        gsap.to('#loader', {
+          opacity: 0, duration: 0.8,
+          onComplete: () => {
+            document.getElementById('loader').style.display = 'none';
+            document.body.style.overflow = '';
+          }
+        });
+      }, 2000);
     });
-    gsap.from('#h-eyebrow', { y: 30, opacity: 0, duration: 1.2, delay: 0.3, ease: 'power3.out' });
-    gsap.from('#h-title',   { y: 60, opacity: 0, duration: 1.4, delay: 0.5, ease: 'power4.out' });
-    gsap.from('#h-sub',     { y: 30, opacity: 0, duration: 1,   delay: 0.9, ease: 'power3.out' });
-    gsap.from('#h-btns',    { y: 20, opacity: 0, duration: 0.8, delay: 1.2, ease: 'power2.out' });
-  }, 2000);
-});
+  } else {
+    // Fallback if GSAP fails to load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        loader.style.display = 'none';
+        document.body.style.overflow = '';
+      }, 2500);
+    });
+  }
+})();
 
 /* NAV SCROLL */
 const nav = document.getElementById('mainNav');
